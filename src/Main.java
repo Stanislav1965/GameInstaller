@@ -7,22 +7,27 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        final String dirGame = "C:\\Games";
-
-        List<String> directory = Arrays.asList("src", "res", "savegames", "temp", "src\\main", "src\\test", "res\\drawables", "res\\vectors", "res\\icons");
-        List<String> filePath = Arrays.asList("src\\main\\Main.java", "src\\main\\Utils.java", "temp\\temp.txt");
+        List<String> dirPath = Arrays.asList("C:\\Games\\src"
+                , "C:\\Games\\res"
+                , "C:\\Games\\savegames"
+                , "C:\\Games\\temp"
+                , "C:\\Games\\src\\main"
+                , "C:\\Games\\src\\test"
+                , "C:\\Games\\res\\drawables"
+                , "C:\\Games\\res\\vectors"
+                , "C:\\Games\\res\\icons");
+        List<String> filePath = Arrays.asList("C:\\Games\\src\\main\\Main.java"
+                , "C:\\Games\\src\\main\\Utils.java"
+                , "C:\\Games\\temp\\temp.txt");
 
         StringBuilder logStrings = new StringBuilder();
-        // определяем объект для каталога
 
-        for (String dir : directory) {
-            String absPath = dirGame + File.separator + dir;
-            logStrings.append(CreateDirectory(absPath)).append(absPath).append("\n");
+        for (String dir : dirPath) {
+            logStrings.append(createDirectory(dir));
         }
 
         for (String name : filePath) {
-            String absPath = dirGame + File.separator + name;
-            logStrings.append(CreateFile(absPath)).append(absPath).append("\n");
+            logStrings.append(createFile(name));
         }
 
         byte[] buffer = logStrings.toString().getBytes();
@@ -36,27 +41,25 @@ public class Main {
         }
     }
 
-    private static String CreateDirectory(String DirPath) {
-        File dirSrc = new File(DirPath);
-        if (dirSrc.exists()) {
-            return "Существует каталог: ";
-        }
-        return dirSrc.mkdir() ? "Cоздан каталог: " : "Не создан каталог: ";
+    private static String createDirectory(String dirPath) {
+        File dirSrc = new File(dirPath);
+        return dirSrc.mkdir() ? "Директория  " + dirPath + "  создана успешно.\n"
+                : "Директория  " + dirPath + "  не создана.\n";
     }
 
-    private static String CreateFile(String dirPath) {
-        File fileSrc = new File(dirPath);
+    private static String createFile(String name) {
+        File fileSrc = new File(name);
         String res = null;
         if (fileSrc.exists() || fileSrc.isFile()) {
-            return "Существует файл: ";
+            return "Файл  " + name + "  существует.\n";
         }
         try {
             if (fileSrc.createNewFile()) {
-                res = "Создан файл: ";
+                res = "Файл  " + name + "  создан успешно.\n";
             }
         } catch (IOException e) {
-            return ("Ошибка " + e + " при создании файла: ");
+            return ("Файл  " + name + "  не создан. Ошибка - " + e + "\n");
         }
-    return res;
+        return res;
     }
 }
